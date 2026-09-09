@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Laminas\AutomaticReleases\Git;
 
 use Laminas\AutomaticReleases\Git\Value\BranchName;
+use Laminas\AutomaticReleases\Gpg\GnupgHome;
 use Laminas\AutomaticReleases\Gpg\SecretKeyId;
 use Psl\Env;
 use Psl\File;
@@ -47,6 +48,7 @@ final class CreateTagViaConsole implements CreateTag
             'git',
             ['tag', $tagName, '-F', $tagFileName, '--cleanup=whitespace', '--local-user=' . $keyId->id()],
             $repositoryDirectory,
+            GnupgHome::environment(),
         );
     }
 }

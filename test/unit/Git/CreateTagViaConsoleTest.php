@@ -8,6 +8,7 @@ use Laminas\AutomaticReleases\Git\CreateTagViaConsole;
 use Laminas\AutomaticReleases\Git\HasTag;
 use Laminas\AutomaticReleases\Git\HasTagViaConsole;
 use Laminas\AutomaticReleases\Git\Value\BranchName;
+use Laminas\AutomaticReleases\Gpg\GnupgHome;
 use Laminas\AutomaticReleases\Gpg\ImportGpgKeyFromStringViaTemporaryFile;
 use Laminas\AutomaticReleases\Gpg\SecretKeyId;
 use PHPUnit\Framework\TestCase;
@@ -69,7 +70,7 @@ final class CreateTagViaConsoleTest extends TestCase
             $this->key,
         );
 
-        Shell\execute('git', ['tag', '-v', 'name-of-the-tag'], $this->repository);
+        Shell\execute('git', ['tag', '-v', 'name-of-the-tag'], $this->repository, GnupgHome::environment());
 
         $fetchedTag = Shell\execute('git', ['show', 'name-of-the-tag'], $this->repository);
 
@@ -99,7 +100,7 @@ final class CreateTagViaConsoleTest extends TestCase
             $this->key,
         );
 
-        Shell\execute('git', ['tag', '-v', $tagName], $this->repository);
+        Shell\execute('git', ['tag', '-v', $tagName], $this->repository, GnupgHome::environment());
         $fetchedTag = Shell\execute('git', ['show', $tagName], $this->repository);
 
         self::assertStringContainsString('tag name-of-the-tag', $fetchedTag);

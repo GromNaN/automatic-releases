@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Laminas\AutomaticReleases\Git;
 
 use Laminas\AutomaticReleases\Git\Value\BranchName;
+use Laminas\AutomaticReleases\Gpg\GnupgHome;
 use Laminas\AutomaticReleases\Gpg\SecretKeyId;
 use Psl;
 use Psl\Shell;
@@ -22,7 +23,12 @@ final class CommitFileViaConsole implements CommitFile
         $this->assertWeAreOnBranch($sourceBranch, $repositoryDirectory, $filename);
 
         Shell\execute('git', ['add', $filename], $repositoryDirectory);
-        Shell\execute('git', ['commit', '-m', $commitMessage, '--gpg-sign=' . $keyId->id()], $repositoryDirectory);
+        Shell\execute(
+            'git',
+            ['commit', '-m', $commitMessage, '--gpg-sign=' . $keyId->id()],
+            $repositoryDirectory,
+            GnupgHome::environment(),
+        );
     }
 
     /**

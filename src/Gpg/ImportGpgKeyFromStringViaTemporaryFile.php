@@ -19,7 +19,13 @@ final class ImportGpgKeyFromStringViaTemporaryFile implements ImportGpgKeyFromSt
         $keyFileName = Filesystem\create_temporary_file(Env\temp_dir(), 'imported-key');
         write($keyFileName, $keyContents);
 
-        $output = Shell\execute('gpg', ['--import', $keyFileName], null, [], Shell\ErrorOutputBehavior::Append);
+        $output = Shell\execute(
+            'gpg',
+            ['--import', $keyFileName],
+            null,
+            GnupgHome::environment(),
+            Shell\ErrorOutputBehavior::Append,
+        );
 
         $matches = Regex\first_match($output, '/key\\s+([A-F0-9]+):\\s+secret\\s+key\\s+imported/im', Regex\capture_groups([1]));
 
